@@ -7,4 +7,5 @@ int main() {
     h.complain("INFO");
     h.complain("WARNING");
     h.complain("ERROR");
+    return (0);
 }
