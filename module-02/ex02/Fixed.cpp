@@ -112,30 +112,30 @@ Fixed Fixed::operator--(int) {
     return (temp);
 }
 
-static Fixed& min(Fixed& a, Fixed& b)
+Fixed& Fixed::min(Fixed& a, Fixed& b)
 {
-    if (a._rawBits < b.rawBits)
+    if (a < b)
         return (a);
     return (b);
 }
 
-const static Fixed& min(const Fixed& a, const Fixed& b)
+const Fixed& Fixed::min(const Fixed& a, const Fixed& b)
 {
-    if (a._rawBits < b.rawBits)
+    if (a < b)
         return (a);
     return (b);
 }
 
-static Fixed& max(Fixed& a, Fixed& b)
+Fixed& Fixed::max(Fixed& a, Fixed& b)
 {
-    if (a._rawBits > b.rawBits)
+    if (a > b)
         return (a);
     return (b);
 }
 
-const static Fixed& max(const Fixed& a, const Fixed& b)
+const Fixed& Fixed::max(const Fixed& a, const Fixed& b)
 {
-    if (a._rawBits > b.rawBits)
+    if (a > b)
         return (a);
     return (b);
 }
