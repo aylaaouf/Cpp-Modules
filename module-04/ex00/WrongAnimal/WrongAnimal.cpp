@@ -4,7 +4,7 @@
 WrongAnimal::WrongAnimal() {
     std::cout << "Animal constructor has been called" << std::endl;
     this->type = "fake";
-};
+}
 
 WrongAnimal::WrongAnimal( const WrongAnimal& other ) {
     std::cout << "Animal copy constructor has been called" << std::endl;
@@ -18,7 +18,7 @@ WrongAnimal& WrongAnimal::operator=( const WrongAnimal& other ) {
 
 WrongAnimal::~WrongAnimal() {
     std::cout << "Animal: Destructor called" << std::endl;
-};
+}
 
 std::string WrongAnimal::getType() const {
     return (this->type);
