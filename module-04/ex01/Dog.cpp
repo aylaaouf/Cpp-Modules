@@ -5,7 +5,7 @@ Dog::Dog() {
     std::cout << "Dog: constructor has been called" << std::endl;
     brain = new Brain();
     this->type = "Dog:";
-};
+}
 
 Dog::Dog( const Dog& other ) {
     std::cout << "Dog: copy constructor has been called" << std::endl;
@@ -25,7 +25,7 @@ Dog& Dog::operator=( const Dog& other ) {
 Dog::~Dog() {
     std::cout << "Dog: Destructor called" << std::endl;
     delete (brain);
-};
+}
 
 void Dog::makeSound() const {
     std::cout << "Dog: Bark!" << std::endl;

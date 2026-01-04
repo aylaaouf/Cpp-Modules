@@ -3,7 +3,7 @@
 
 Brain::Brain() {
     std::cout << "Brain: constructor has been called" << std::endl;
-};
+}
 
 Brain::Brain( const Brain& other ) {
     std::cout << "Brain: copy constructor has been called" << std::endl;
@@ -22,4 +22,4 @@ Brain& Brain::operator=( const Brain& other ) {
 
 Brain::~Brain() {
     std::cout << "Brain: Destructor called" << std::endl;
-};
+}

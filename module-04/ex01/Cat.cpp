@@ -5,7 +5,7 @@ Cat::Cat() {
     std::cout << "Cat: constructor has been called" << std::endl;
     brain = new Brain();
     this->type = "Cat";
-};
+}
 
 Cat::Cat( const Cat& other ) {
     std::cout << "Cat: copy constructor has been called" << std::endl;
@@ -25,7 +25,7 @@ Cat& Cat::operator=( const Cat& other ) {
 Cat::~Cat() {
     std::cout << "Cat: Destructor called" << std::endl;
     delete (brain);
-};
+}
 
 void Cat::makeSound() const {
     std::cout << "Cat: meow!" << std::endl;
