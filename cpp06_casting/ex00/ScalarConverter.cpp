@@ -61,7 +61,47 @@ void ScalarConverter::convert(const std::string &input) {
         std::cout << "float: " << d << "f" << std::endl;
         std::cout << "double: " << d << std::endl;
     }
-    // if (inputType == "char") {
-    //     char c 
-    // }
+    else if (inputType == "char") {
+        char c = input[0];
+        int i = static_cast<int>(c);
+        float f = static_cast<float>(c);
+        double d = static_cast<double>(c);
+        std::cout << "char: " << c << std::endl;
+        std::cout << "int: " << i << std::endl;
+        std::cout << "float: " << f << ".0f" << std::endl;
+        std::cout << "double: " << d << ".0" << std::endl;
+    }
+    else if (inputType == "int") {
+        int i = std::atoi(input.c_str());
+        char c = (i >= 0 && i <= 127 && isprint(i)) ? static_cast<char>(i) : 0;
+        float f = static_cast<float>(i);
+        double d = static_cast<double>(i);
+        if (c)
+            std::cout << "char: '" << c << "'" << std::endl;
+        else if (i >= 0 && i <= 127)
+            std::cout << "char: Non displayable" << std::endl;
+        else
+            std::cout << "char: impossible" << std::endl;
+        std::cout << "int: " << i << std::endl;
+        std::cout << "float: " << f << ".0f" << std::endl;
+        std::cout << "double: " << d << ".0" << std::endl;
+    }
+    else if (inputType == "float" || inputType == "double") {
+        double d = std::atof(input.c_str());
+        int i = static_cast<int>(d);
+        char c = (i >= 0 && i <= 127 && isprint(i)) ? static_cast<char>(i) : 0;
+        float f = static_cast<float>(d);
+        if (c)
+            std::cout << "char: '" << c << "'" << std::endl;
+        else if (i >= 0 && i <= 127)
+            std::cout << "char: Non displayable" << std::endl;
+        else
+            std::cout << "char: impossible" << std::endl;
+        if (d > INT_MAX || d < INT_MIN || std::isnan(d))
+            std::cout << "int: impossible" << std::endl;
+        else
+            std::cout << "int: " << i << std::endl;
+        std::cout << "float: " << f << ".0f" << std::endl;
+        std::cout << "double: " << d << ".0" << std::endl;
+    }
 }
