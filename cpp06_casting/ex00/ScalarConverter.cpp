@@ -54,6 +54,14 @@ std::string checkInput(const std::string &input) {
 
 void ScalarConverter::convert(const std::string &input) {
     std::string inputType = checkInput(input);
-    // if (inputType )
-    double d = std::stod(input);
+    if (inputType == "special") {
+        double d = std::atof(input.c_str());
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: " << d << "f" << std::endl;
+        std::cout << "double: " << d << std::endl;
+    }
+    // if (inputType == "char") {
+    //     char c 
+    // }
 }

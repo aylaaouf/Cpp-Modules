@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 class ScalarConverter {
     public:
@@ -14,6 +15,6 @@ class ScalarConverter {
         ~ScalarConverter();
 };
 
-void checkinput(std::string &input);
+void checkInput(std::string &input);
 
 #endif
