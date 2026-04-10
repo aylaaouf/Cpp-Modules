@@ -52,56 +52,91 @@ std::string checkInput(const std::string &input) {
     return "invalid";
 }
 
-void ScalarConverter::convert(const std::string &input) {
-    std::string inputType = checkInput(input);
-    if (inputType == "special") {
-        double d = std::atof(input.c_str());
-        std::cout << "char: impossible" << std::endl;
-        std::cout << "int: impossible" << std::endl;
-        std::cout << "float: " << d << "f" << std::endl;
-        std::cout << "double: " << d << std::endl;
+void ScalarConverter::convert(const std::string &input)
+{
+    std::string type = checkInput(input);
+
+    if (type == "special")
+    {
+        double d = std::strtod(input.c_str(), NULL);
+        std::cout << "char: impossible\n";
+        std::cout << "int: impossible\n";
+        std::cout << "float: " << d << "f\n";
+        std::cout << "double: " << d << "\n";
+        return;
     }
-    else if (inputType == "char") {
+    if (type == "char")
+    {
         char c = input[0];
-        int i = static_cast<int>(c);
-        float f = static_cast<float>(c);
-        double d = static_cast<double>(c);
-        std::cout << "char: " << c << std::endl;
-        std::cout << "int: " << i << std::endl;
-        std::cout << "float: " << f << ".0f" << std::endl;
-        std::cout << "double: " << d << ".0" << std::endl;
+        std::cout << "char: " << c << "\n";
+        std::cout << "int: " << static_cast<int>(c) << "\n";
+        std::cout << "float: " << static_cast<float>(c) << ".0f\n";
+        std::cout << "double: " << static_cast<double>(c) << ".0\n";
+        return;
     }
-    else if (inputType == "int") {
-        int i = std::atoi(input.c_str());
-        char c = (i >= 0 && i <= 127 && isprint(i)) ? static_cast<char>(i) : 0;
-        float f = static_cast<float>(i);
-        double d = static_cast<double>(i);
-        if (c)
-            std::cout << "char: '" << c << "'" << std::endl;
+    if (type == "int")
+    {
+        char *end;
+        long l = std::strtol(input.c_str(), &end, 10);
+        if (*end != '\0' || l > INT_MAX || l < INT_MIN)
+        {
+            std::cout << "char: impossible\n";
+            std::cout << "int: impossible\n";
+            std::cout << "float: impossible\n";
+            std::cout << "double: impossible\n";
+            return;
+        }
+        int i = static_cast<int>(l);
+        if (i >= 0 && i <= 127 && isprint(i))
+            std::cout << "char: '" << static_cast<char>(i) << "'\n";
         else if (i >= 0 && i <= 127)
-            std::cout << "char: Non displayable" << std::endl;
+            std::cout << "char: Non displayable\n";
         else
-            std::cout << "char: impossible" << std::endl;
-        std::cout << "int: " << i << std::endl;
-        std::cout << "float: " << f << ".0f" << std::endl;
-        std::cout << "double: " << d << ".0" << std::endl;
+            std::cout << "char: impossible\n";
+
+        std::cout << "int: " << i << "\n";
+        std::cout << "float: " << static_cast<float>(i) << ".0f\n";
+        std::cout << "double: " << static_cast<double>(i) << ".0\n";
+        return;
     }
-    else if (inputType == "float" || inputType == "double") {
-        double d = std::atof(input.c_str());
+    if (type == "float" || type == "double")
+    {
+        char *end;
+        double d = std::strtod(input.c_str(), &end);
+        if (*end != '\0' && *end != 'f')
+        {
+            std::cout << "char: impossible\n";
+            std::cout << "int: impossible\n";
+            std::cout << "float: impossible\n";
+            std::cout << "double: impossible\n";
+            return;
+        }
         int i = static_cast<int>(d);
-        char c = (i >= 0 && i <= 127 && isprint(i)) ? static_cast<char>(i) : 0;
         float f = static_cast<float>(d);
-        if (c)
-            std::cout << "char: '" << c << "'" << std::endl;
-        else if (i >= 0 && i <= 127)
-            std::cout << "char: Non displayable" << std::endl;
+        if (d >= 0 && d <= 127 && isprint(i))
+            std::cout << "char: '" << static_cast<char>(i) << "'\n";
+        else if (d >= 0 && d <= 127)
+            std::cout << "char: Non displayable\n";
         else
-            std::cout << "char: impossible" << std::endl;
+            std::cout << "char: impossible\n";
         if (d > INT_MAX || d < INT_MIN || std::isnan(d))
-            std::cout << "int: impossible" << std::endl;
+            std::cout << "int: impossible\n";
         else
-            std::cout << "int: " << i << std::endl;
-        std::cout << "float: " << f << ".0f" << std::endl;
-        std::cout << "double: " << d << ".0" << std::endl;
+            std::cout << "int: " << i << "\n";
+        if (f == i)
+        {
+            std::cout << "float: " << f << ".0f\n";
+            std::cout << "double: " << d << ".0\n";
+        }
+        else
+        {
+            std::cout << "float: " << f << "f\n";
+            std::cout << "double: " << d << "\n";
+        }
+        return;
     }
+    std::cout << "char: impossible\n";
+    std::cout << "int: impossible\n";
+    std::cout << "float: impossible\n";
+    std::cout << "double: impossible\n";
 }
