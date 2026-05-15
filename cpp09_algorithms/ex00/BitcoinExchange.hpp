@@ -6,6 +6,7 @@
 #include <map>
 #include <fstream>
 #include <algorithm>
+#include <climits>
 
 bool extractData(std::map<std::string, double>& data,
     std::string filename);
