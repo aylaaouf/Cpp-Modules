@@ -6,7 +6,7 @@ int main(int ac, char **av) {
     std::vector<int> data;
     if (!rpn(av[1], data))
     {
-        std::cerr << "Character not allowed in argv" << std::endl;
+        std::cerr << "Error" << std::endl;
         return 1;
     }
     return 0;
