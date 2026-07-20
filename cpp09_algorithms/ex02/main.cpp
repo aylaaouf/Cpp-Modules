@@ -1,6 +1,150 @@
 #include "PmergeMe.hpp"
 
-int main(int ac, char **av) {
+int is_valid(char *av)
+{
+    int i = 0;
+    if (av[i] == '+' || av[i] == '-')
+        i++;
+    if (av[i] == '\0')
+        return 0;
+    while (av[i])
+    {
+        if (!std::isdigit(av[i]))
+            return 0;
+        i++;
+    }
+    return 1;
+}
+
+int PmergeMe::readData(int size, char **av)
+{
+    for (int i = 1; i < size; i++)
+    {
+        if (is_valid(av[i]))
+            _numbers.push_back(atoi(av[i]));
+        else
+            return 0;
+    }
+    return 1;
+}
+
+void PmergeMe::makePairs(std::vector<int> &numbers,
+                    std::vector<std::pair<int, int> > &pairs,
+                    std::vector<int> &main,
+                    std::vector<int> &pending,
+                    bool &hasOdd,
+                    int &odd)
+{
+    for (size_t i = 0; i + 1 < numbers.size(); i += 2)
+    {
+        int a = numbers[i];
+        int b = numbers[i + 1];
+        if (a > b)
+            std::swap(a, b);
+        pairs.push_back(std::make_pair(a, b));
+    }
+    if (numbers.size() % 2)
+    {
+        hasOdd = true;
+        odd = numbers.back();
+    }
+    for (size_t i = 0; i < pairs.size(); i++)
+    {
+        pending.push_back(pairs[i].first);
+        main.push_back(pairs[i].second);
+    }
+}
+
+std::vector<int> generateJacobsthal(size_t sizeOfPendind) {
+    int first = 0;
+    size_t second = 1;
+    int value = -1;
+    std::vector<int> numbers;
+    while (second < sizeOfPendind)
+    {
+        if (first == 0 && second == 1)
+        {
+            numbers.push_back(first);
+            numbers.push_back((int)second);
+        }
+        value = second + (first * 2);
+        first = second;
+        second = value;
+        numbers.push_back(value);
+    }
+    return numbers;
+}
+
+void PmergeMe::recursiveSort(std::vector<int> &chain) {
+    bool hasOdd = false;
+    int odd = -1;
+    if (chain.size() <= 1)
+        return ;
+    std::vector<std::pair<int, int> > pairs;
+    std::vector<int> mainChain;
+    std::vector<int> pendingChain;
+
+    makePairs(chain, pairs, mainChain, pendingChain, hasOdd, odd);
+    recursiveSort(mainChain);
+    insertElements(mainChain, pendingChain);
+    if (hasOdd)
+    {
+        int pos = binarysearch(mainChain, odd);
+        mainChain.insert(mainChain.begin() + pos, odd);
+    }
+    chain = mainChain;
+}
+
+void PmergeMe::Sort() {
+    recursiveSort(_numbers);
+    int i = 0;
+    while (_numbers[i])
+    {
+        std::cout << _numbers[i] << std::endl;
+        i++;
+    }
+}
+
+int PmergeMe::binarysearch(std::vector<int> &mainChain, int value) {
+    int low = 0;
+    int high = mainChain.size() - 1;
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (mainChain[mid] == value)
+            return mid;
+        else if (mainChain[mid] < value)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return low;
+}
+
+void PmergeMe::insertElements(std::vector<int> &main, std::vector<int> &pending) {
+    for (size_t i = 0; i < pending.size(); i++) {
+        int pos = binarysearch(main, pending[i]);
+        main.insert(main.begin() + pos, pending[i]);
+    }
+}
+
+std::vector<int> buildInsertionOrder(
+    const std::vector<int>& jacob,
+    size_t pendingSize) {
+    std::vector<int> numbers = generateJacobsthal(pendingSize);
+    
+}
+
+int main(int ac, char **av)
+{
+    PmergeMe algo;
     if (ac < 2)
         return 1;
+    if (!algo.readData(ac, av))
+    {
+        std::cerr << "Invalid character in argv" << std::endl;
+        return 1;
+    }
+    algo.Sort();
+    return 0;
 }
