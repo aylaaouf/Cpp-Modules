@@ -56,17 +56,14 @@ void PmergeMe::makePairs(std::vector<int> &numbers,
 }
 
 std::vector<int> generateJacobsthal(size_t sizeOfPendind) {
-    int first = 0;
-    size_t second = 1;
+    int first = 1;
+    size_t second = 3;
     int value = -1;
     std::vector<int> numbers;
-    while (second < sizeOfPendind)
+    while (true)
     {
-        if (first == 0 && second == 1)
-        {
-            numbers.push_back(first);
-            numbers.push_back((int)second);
-        }
+        if (second >= sizeOfPendind)
+            break;
         value = second + (first * 2);
         first = second;
         second = value;
@@ -97,12 +94,8 @@ void PmergeMe::recursiveSort(std::vector<int> &chain) {
 
 void PmergeMe::Sort() {
     recursiveSort(_numbers);
-    int i = 0;
-    while (_numbers[i])
-    {
+    for (size_t i = 0; i < _numbers.size(); i++)
         std::cout << _numbers[i] << std::endl;
-        i++;
-    }
 }
 
 int PmergeMe::binarysearch(std::vector<int> &mainChain, int value) {
@@ -121,19 +114,38 @@ int PmergeMe::binarysearch(std::vector<int> &mainChain, int value) {
     return low;
 }
 
-void PmergeMe::insertElements(std::vector<int> &main, std::vector<int> &pending) {
-    for (size_t i = 0; i < pending.size(); i++) {
-        int pos = binarysearch(main, pending[i]);
-        main.insert(main.begin() + pos, pending[i]);
-    }
-}
-
 std::vector<int> buildInsertionOrder(
     const std::vector<int>& jacob,
     size_t pendingSize) {
-    std::vector<int> numbers = generateJacobsthal(pendingSize);
-    
+    std::vector<int> order;
+    size_t previous = 0;
+    for (size_t i = 0; i < jacob.size(); i++) {
+        size_t current = jacob[i];
+        if (current > pendingSize)
+            current = pendingSize;
+        for (size_t j = current; j > previous; j--)
+            order.push_back(j - 1);
+        if (previous == pendingSize)
+            break ;
+        previous = current;
+    }
+    if (previous < pendingSize)
+    {
+        for (size_t j = pendingSize; j > previous; --j)
+            order.push_back(j - 1);
+    }
+    return order;
 }
+
+void PmergeMe::insertElements(std::vector<int> &main, std::vector<int> &pending) {
+    std::vector<int> jacob = generateJacobsthal(pending.size());
+    std::vector<int> order = buildInsertionOrder(jacob, pending.size());
+    for (size_t i = 0; i < order.size(); i++) {
+        int pos = binarysearch(main, pending[order[i]]);
+        main.insert(main.begin() + pos, pending[order[i]]);
+    }
+}
+
 
 int main(int ac, char **av)
 {
