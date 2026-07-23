@@ -11,13 +11,13 @@ bool allowed_char(char c) {
     return false;
 }
 
-bool calcul(std::vector<int> &data, char op)
+bool calcul(std::stack<int> &data, char op)
 {
     int result = 0;
-    int right = data.back();
-    data.pop_back();
-    int left = data.back();
-    data.pop_back();
+    int right = data.top();
+    data.pop();
+    int left = data.top();
+    data.pop();
 
     switch(op)
     {
@@ -37,11 +37,11 @@ bool calcul(std::vector<int> &data, char op)
             result = left * right;
             break ;
     }
-    data.push_back(result);
+    data.push(result);
     return true;
 }
 
-int rpn(std::string argv, std::vector<int> &data) {
+int rpn(std::string argv, std::stack<int> &data) {
     int i = 0;
     while (argv[i])
     {
@@ -53,7 +53,7 @@ int rpn(std::string argv, std::vector<int> &data) {
         if (!allowed_char(argv[i]) && !std::isdigit(argv[i]))
             return 0;
         if (std::isdigit(argv[i]))
-            data.push_back(argv[i] - '0');
+            data.push(argv[i] - '0');
         else
         {
             if (data.size() < 2)
@@ -66,6 +66,6 @@ int rpn(std::string argv, std::vector<int> &data) {
     if (data.size() != 1)
         return 0;
     else
-        std::cout << data.back() << std::endl;
+        std::cout << data.top() << std::endl;
     return 1;
 }

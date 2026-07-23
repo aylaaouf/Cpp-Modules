@@ -3,7 +3,7 @@
 int main(int ac, char **av) {
     if (ac != 2)
         return 1;
-    std::vector<int> data;
+    std::stack<int> data;
     if (!rpn(av[1], data))
     {
         std::cerr << "Error" << std::endl;

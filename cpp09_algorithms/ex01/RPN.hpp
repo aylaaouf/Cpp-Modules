@@ -1,6 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
+#include <stack>
 
-int rpn(std::string argv, std::vector<int> &data);
+int rpn(std::string argv, std::stack<int> &data);
