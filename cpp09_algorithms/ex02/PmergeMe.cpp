@@ -8,8 +8,10 @@ size_t limitOfSearch(size_t limit, size_t size)
 int is_valid(char *av)
 {
     int i = 0;
-    if (av[i] == '+' || av[i] == '-')
+    if (av[i] == '+')
         i++;
+    else if (av[i] == '-')
+        return 0;
     if (av[i] == '\0')
         return 0;
     while (av[i])
@@ -25,18 +27,22 @@ int PmergeMe::readData(int size, char **av)
 {
     for (int i = 1; i < size; i++)
     {
-        if (is_valid(av[i]))
-            _numbers.push_back(atoi(av[i]));
-        else
+        int value = atoi(av[i]);
+        if (std::find(_vector.begin(), _vector.end(), value) != _vector.end())
             return 0;
+        if (!is_valid(av[i]))
+            return 0;
+        _vector.push_back(value);
+        _deque.push_back(value);
     }
     return 1;
 }
 
-void PmergeMe::makePairs(std::vector<int> &numbers,
+template<typename Container>
+void makePairs(Container &numbers,
                     std::vector<std::pair<int, int> > &pairs,
-                    std::vector<int> &main,
-                    std::vector<int> &pending,
+                    Container &main,
+                    Container &pending,
                     bool &hasOdd,
                     int &odd)
 {
@@ -77,14 +83,24 @@ std::vector<int> generateJacobsthal(size_t sizeOfPendind) {
     return numbers;
 }
 
-void PmergeMe::recursiveSort(std::vector<int> &chain) {
+template<typename Container>
+int binarysearch(Container &mainChain, int value);
+
+template<typename Container>
+int binarysearch(Container &mainChain, int value, int limit);
+
+template<typename Container>
+void insertElements(Container &main, std::vector<std::pair<int, int> > &pairs);
+
+template<typename Container>
+void recursiveSort(Container &chain) {
     bool hasOdd = false;
     int odd = -1;
     if (chain.size() <= 1)
         return ;
     std::vector<std::pair<int, int> > pairs;
-    std::vector<int> mainChain;
-    std::vector<int> pendingChain;
+    Container mainChain;
+    Container pendingChain;
 
     makePairs(chain, pairs, mainChain, pendingChain, hasOdd, odd);
     recursiveSort(mainChain);
@@ -97,13 +113,51 @@ void PmergeMe::recursiveSort(std::vector<int> &chain) {
     chain = mainChain;
 }
 
-void PmergeMe::Sort() {
-    recursiveSort(_numbers);
-    for (size_t i = 0; i < _numbers.size(); i++)
-        std::cout << _numbers[i] << std::endl;
+void PmergeMe::Sort()
+{
+    struct timeval start, end;
+
+    std::cout << "Before: ";
+    for (size_t i = 0; i < _vector.size(); i++)
+        std::cout << _vector[i] << " ";
+    std::cout << std::endl;
+
+    gettimeofday(&start, NULL);
+    recursiveSort(_vector);
+    gettimeofday(&end, NULL);
+
+    long vectorTime =
+        (end.tv_sec - start.tv_sec) * 1000000L +
+        (end.tv_usec - start.tv_usec);
+
+    gettimeofday(&start, NULL);
+    recursiveSort(_deque);
+    gettimeofday(&end, NULL);
+
+    long dequeTime =
+        (end.tv_sec - start.tv_sec) * 1000000L +
+        (end.tv_usec - start.tv_usec);
+
+    std::cout << "After: ";
+    for (size_t j = 0; j < _vector.size(); j++)
+        std::cout << _vector[j] << " ";
+    std::cout << std::endl;
+    
+    std::cout << "Time to process a range of "
+            << _vector.size()
+            << " elements with std::vector : "
+            << vectorTime << " us"
+            << std::endl;
+
+    std::cout << "Time to process a range of "
+            << _deque.size()
+            << " elements with std::deque : "
+            << dequeTime << " us"
+            << std::endl;
 }
 
-int PmergeMe::binarysearch(std::vector<int> &mainChain, int value) {
+template<typename Container>
+int binarysearch(Container &mainChain, int value) {
     int low = 0;
     int high = mainChain.size() - 1;
     while (low <= high)
@@ -119,7 +173,8 @@ int PmergeMe::binarysearch(std::vector<int> &mainChain, int value) {
     return low;
 }
 
-int PmergeMe::binarysearch(std::vector<int> &mainChain, int value, int limit) {
+template<typename Container>
+int binarysearch(Container &mainChain, int value, int limit) {
     int low = 0;
     int high = static_cast<int>(limitOfSearch(static_cast<size_t>(limit), mainChain.size()));
     while (low < high)
@@ -156,8 +211,9 @@ std::vector<int> buildInsertionOrder(
     return order;
 }
 
-void PmergeMe::insertElements(std::vector<int> &main, std::vector<std::pair<int, int> > &pairs) {
-    std::vector<int> pending;
+template<typename Container>
+void insertElements(Container &main, std::vector<std::pair<int, int> > &pairs) {
+    Container pending;
     for (size_t i = 0; i < pairs.size(); i++)
         pending.push_back(pairs[i].first);
     std::vector<int> jacob = generateJacobsthal(pending.size());

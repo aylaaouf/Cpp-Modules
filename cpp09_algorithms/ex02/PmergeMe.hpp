@@ -5,21 +5,15 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <sys/time.h>
+#include <deque>
+#include <algorithm>
 
 class PmergeMe {
     private:
-        std::vector<int> _numbers;
+        std::vector<int> _vector;
+        std::deque<int>  _deque;
     public:
         int readData(int ac, char **av);
-        void makePairs(std::vector<int> &numbers,
-                    std::vector<std::pair<int, int> > &pairs,
-                    std::vector<int> &main,
-                    std::vector<int> &pending,
-                    bool &hasOdd,
-                    int &odd);
-        void recursiveSort(std::vector<int> &chain);
         void Sort();
-        void insertElements(std::vector<int> &main, std::vector<std::pair<int, int> > &pairs);
-        int binarysearch(std::vector<int> &mainChain, int value);
-        int binarysearch(std::vector<int> &mainChain, int value, int limit);
 };

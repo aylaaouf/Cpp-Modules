@@ -7,7 +7,7 @@ int main(int ac, char **av)
         return 1;
     if (!algo.readData(ac, av))
     {
-        std::cerr << "Invalid character in argv" << std::endl;
+        std::cerr << "Error" << std::endl;
         return 1;
     }
     algo.Sort();
